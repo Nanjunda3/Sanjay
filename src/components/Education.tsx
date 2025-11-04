@@ -148,8 +148,37 @@ export default function Education() {
               ))}
             </div>
           </div>
-
-          <div id="passions" className="space-y-8">
+<style>{`
+              .passion-scroll-container {
+                scrollbar-width: thin;
+                scrollbar-color: rgba(20, 184, 166, 0.5) rgba(30, 41, 59, 0.5);
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar {
+                height: 8px;
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar-track {
+                background: rgba(30, 41, 59, 0.5);
+                border-radius: 10px;
+                margin: 0 20px;
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar-thumb {
+                background: linear-gradient(90deg, rgba(20, 184, 166, 0.8), rgba(6, 182, 212, 0.8));
+                border-radius: 10px;
+                border: 2px solid rgba(30, 41, 59, 0.3);
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(90deg, rgba(20, 184, 166, 1), rgba(6, 182, 212, 1));
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar-thumb:active {
+                background: linear-gradient(90deg, rgba(13, 148, 136, 1), rgba(8, 145, 178, 1));
+              }
+            `}</style>
+            <div className="passion-scroll-container overflow-x-auto pb-6">
             <h3 className="text-3xl font-bold text-white text-center mb-8">My Passions</h3>
             <div className="overflow-x-auto pb-4">
               <div className="flex gap-6 min-w-max px-0">
