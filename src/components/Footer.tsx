@@ -1,17 +1,48 @@
-import { ArrowUp, Mail, Phone, MapPin, Linkedin, Github, Twitter, Instagram } from 'lucide-react';
+import { ArrowUp, Mail, Phone, MapPin, Linkedin, Github, Instagram } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [isSubscribing, setIsSubscribing] = useState(false);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubscribed(true);
-    setTimeout(() => {
-      setSubscribed(false);
-      setEmail('');
-    }, 3000);
+    setIsSubscribing(true);
+
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      const response = await fetch(
+        `${supabaseUrl}/functions/v1/send-email`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${anonKey}`,
+          },
+          body: JSON.stringify({
+            type: 'newsletter',
+            subscriberEmail: email,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        setSubscribed(true);
+        setTimeout(() => {
+          setSubscribed(false);
+          setEmail('');
+        }, 3000);
+      } else {
+        console.error('Failed to subscribe');
+      }
+    } catch (error) {
+      console.error('Error subscribing:', error);
+    } finally {
+      setIsSubscribing(false);
+    }
   };
 
   const scrollToTop = () => {
@@ -32,7 +63,7 @@ export default function Footer() {
               </p>
               <div className="flex gap-3">
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/sanjayks-developer/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-teal-400 transition-all"
@@ -41,7 +72,7 @@ export default function Footer() {
                   <Linkedin className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://github.com"
+                  href="https://github.com/Nanjunda3"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-teal-400 transition-all"
@@ -49,7 +80,7 @@ export default function Footer() {
                 >
                   <Github className="w-5 h-5" />
                 </a>
-                <a
+                {/* <a
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -57,9 +88,9 @@ export default function Footer() {
                   aria-label="Twitter"
                 >
                   <Twitter className="w-5 h-5" />
-                </a>
+                </a> */}
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/x_sanju._2?igsh=Y3lzc2R2N3huZWN1"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-teal-400 transition-all"
@@ -83,11 +114,11 @@ export default function Footer() {
                     Projects
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <a href="#services" className="text-slate-400 hover:text-teal-400 transition-colors">
                     Services
                   </a>
-                </li>
+                </li> */}
                 <li>
                   <a href="#education" className="text-slate-400 hover:text-teal-400 transition-colors">
                     Education
@@ -110,14 +141,14 @@ export default function Footer() {
                 </li>
                 <li className="flex items-start gap-2 text-slate-400 text-sm">
                   <Phone className="w-4 h-4 shrink-0 mt-1 text-teal-400" />
-                  <a href="tel:+917829927125" className="hover:text-teal-400 transition-colors">
-                    (+91) 7829927125
+                  <a href="tel:+917892927125" className="hover:text-teal-400 transition-colors">
+                    (+91) 7892927125
                   </a>
                 </li>
                 <li className="flex items-start gap-2 text-slate-400 text-sm">
                   <Mail className="w-4 h-4 shrink-0 mt-1 text-teal-400" />
-                  <a href="mailto:sanjay@example.com" className="hover:text-teal-400 transition-colors">
-                    sanjay@example.com
+                  <a href="mailto:sanjaysnanjunda@gmail.com" className="hover:text-teal-400 transition-colors">
+                    sanjaysnanjunda@gmail.com
                   </a>
                 </li>
               </ul>
@@ -135,13 +166,15 @@ export default function Footer() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your@email.com"
                     required
-                    className="flex-1 px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-teal-500 transition-colors"
+                    disabled={isSubscribing}
+                    className="flex-1 px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-teal-500 transition-colors disabled:opacity-50"
                   />
                   <button
                     type="submit"
-                    className="px-6 py-2 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all"
+                    disabled={isSubscribing}
+                    className="px-6 py-2 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {subscribed ? 'Subscribed!' : 'Subscribe'}
+                    {subscribed ? 'Subscribed!' : isSubscribing ? 'Subscribing...' : 'Subscribe'}
                   </button>
                 </div>
               </form>

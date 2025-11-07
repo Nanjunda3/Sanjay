@@ -1,12 +1,29 @@
-import { GraduationCap, Award, BookOpen, Code } from 'lucide-react';
+import { GraduationCap, Award, BookOpen, Code, Music, Users, X } from 'lucide-react';
+import { useState } from 'react';
 
 const education = [
   {
-    degree: 'Bachelor of Technology',
-    field: 'Computer Science & Engineering',
-    institution: 'University Name',
-    period: '2018 - 2022',
-    gpa: '8.5/10',
+    degree: 'Bachelor of Engineering',
+    field: 'Electronics & Communication',
+    institution: 'Visvesvaraya Technological University',
+    period: 'Aug 2022',
+    gpa: '7.35 CGPA',
+    icon: GraduationCap,
+  },
+  {
+    degree: 'Pre-University Course',
+    field: 'Science',
+    institution: 'Pre-University Board',
+    period: 'Mar 2018',
+    gpa: '60%',
+    icon: BookOpen,
+  },
+  {
+    degree: 'Secondary School Certificate (SSLC)',
+    field: 'General Studies',
+    institution: 'Secondary School Board',
+    period: 'Apr 2016',
+    gpa: '88%',
     icon: GraduationCap,
   },
 ];
@@ -55,21 +72,35 @@ const passions = [
     title: 'Continuous Learning',
     description: 'Constantly exploring new technologies and frameworks. Currently diving deep into Web3, AI integration, and serverless architectures.',
     icon: GraduationCap,
-    color: 'from-blue-500 to-purple-500',
+    color: 'from-blue-500 to-cyan-500',
+  },
+  {
+    title: 'Music Enthusiast',
+    description: 'Passionate about music production and sound design. Exploring the intersection of technology and music through creative audio projects.',
+    icon: Music,
+    color: 'from-rose-500 to-pink-500',
+  },
+  {
+    title: 'Community Building',
+    description: 'Active in developer communities, mentoring junior developers and organizing tech meetups. Believe in knowledge sharing and collaborative growth.',
+    icon: Users,
+    color: 'from-emerald-500 to-teal-500',
   },
 ];
 
 export default function Education() {
+  const [selectedCertificate, setSelectedCertificate] = useState<typeof certifications[0] | null>(null);
+
   return (
     <section id="education" className="py-20 bg-slate-900">
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">Education & Passions</h2>
-            <p className="text-slate-400 text-lg">Academic background and what drives me</p>
+            <h2 className="text-4xl font-bold text-white mb-4">Education</h2>
+            <p className="text-slate-400 text-lg">Academic background and certifications</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 mb-16">
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
             {education.map((edu, index) => (
               <div
                 key={index}
@@ -80,92 +111,135 @@ export default function Education() {
                     <edu.icon className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-2xl font-bold text-white mb-2">{edu.degree}</h3>
-                    <p className="text-teal-400 font-semibold mb-2">{edu.field}</p>
-                    <p className="text-slate-400 mb-1">{edu.institution}</p>
+                    <h3 className="text-xl font-bold text-white mb-2">{edu.degree}</h3>
+                    <p className="text-teal-400 font-semibold text-sm mb-2">{edu.field}</p>
+                    <p className="text-slate-400 text-sm mb-1">{edu.institution}</p>
                     <div className="flex flex-wrap gap-4 mt-4">
-                      <span className="text-sm text-slate-500">{edu.period}</span>
-                      <span className="text-sm text-amber-400 font-semibold">GPA: {edu.gpa}</span>
+                      <span className="text-xs text-slate-500">{edu.period}</span>
+                      <span className="text-xs text-amber-400 font-semibold">{edu.gpa}</span>
                     </div>
                   </div>
                 </div>
               </div>
             ))}
-
-            <div className="bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-teal-500/50 transition-all">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg">
-                  <Award className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-white">Certifications</h3>
-              </div>
-              <div className="space-y-4">
-                {certifications.map((cert, index) => (
-                  <div
-                    key={index}
-                    className="flex items-start gap-3 p-3 rounded-lg bg-slate-900 hover:bg-slate-900/50 transition-colors"
-                  >
-                    <cert.icon className="w-5 h-5 text-teal-400 shrink-0 mt-1" />
-                    <div className="flex-1">
-                      <div className="font-semibold text-white text-sm">{cert.title}</div>
-                      <div className="text-slate-400 text-xs">{cert.issuer}</div>
-                    </div>
-                    <span className="text-xs text-slate-500">{cert.year}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
-          <div id="passions" className="space-y-8">
-            <h3 className="text-3xl font-bold text-white text-center mb-8">My Passions</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              {passions.map((passion, index) => (
+          <div className="bg-slate-800 rounded-xl p-8 border border-slate-700 hover:border-teal-500/50 transition-all mb-16">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 bg-gradient-to-br from-amber-500 to-orange-500 rounded-lg">
+                <Award className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-white">Certifications</h3>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              {certifications.map((cert, index) => (
                 <div
                   key={index}
-                  className="bg-slate-800 rounded-xl p-6 border border-slate-700 hover:border-teal-500/50 transition-all hover:transform hover:scale-105"
+                  onClick={() => setSelectedCertificate(cert)}
+                  className="flex items-start gap-3 p-4 rounded-lg bg-slate-900 hover:bg-slate-800 hover:border-teal-500/50 transition-all cursor-pointer border border-slate-800 group"
                 >
-                  <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${passion.color} mb-4`}>
-                    <passion.icon className="w-8 h-8 text-white" />
+                  <cert.icon className="w-5 h-5 text-teal-400 shrink-0 mt-1 group-hover:scale-110 transition-transform" />
+                  <div className="flex-1">
+                    <div className="font-semibold text-white text-sm group-hover:text-teal-400 transition-colors">{cert.title}</div>
+                    <div className="text-slate-400 text-xs">{cert.issuer}</div>
                   </div>
-                  <h4 className="text-xl font-bold text-white mb-3">{passion.title}</h4>
-                  <p className="text-slate-400 text-sm leading-relaxed">{passion.description}</p>
+                  <span className="text-xs text-slate-500">{cert.year}</span>
                 </div>
               ))}
             </div>
           </div>
-
-          <div className="mt-16 bg-gradient-to-r from-slate-800 to-slate-900 rounded-xl p-8 border border-slate-700">
-            <h3 className="text-2xl font-bold text-white mb-6 text-center">Latest Blog Posts</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <a
-                href="#"
-                className="group p-6 bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors border border-slate-700 hover:border-teal-500/50"
-              >
-                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">
-                  React Hooks Deep Dive: useEffect Best Practices
-                </h4>
-                <p className="text-slate-400 text-sm mb-3">
-                  A comprehensive guide to mastering useEffect and avoiding common pitfalls in React applications.
-                </p>
-                <span className="text-teal-400 text-sm font-semibold">Read more →</span>
-              </a>
-              <a
-                href="#"
-                className="group p-6 bg-slate-900 rounded-lg hover:bg-slate-800 transition-colors border border-slate-700 hover:border-teal-500/50"
-              >
-                <h4 className="text-lg font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">
-                  Building Scalable Node.js APIs: Architecture Patterns
-                </h4>
-                <p className="text-slate-400 text-sm mb-3">
-                  Learn how to design and build maintainable REST APIs with Node.js and Express.
-                </p>
-                <span className="text-teal-400 text-sm font-semibold">Read more →</span>
-              </a>
+<style>{`
+              .passion-scroll-container {
+                scrollbar-width: thin;
+                scrollbar-color: rgba(20, 184, 166, 0.5) rgba(30, 41, 59, 0.5);
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar {
+                height: 8px;
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar-track {
+                background: rgba(30, 41, 59, 0.5);
+                border-radius: 10px;
+                margin: 0 20px;
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar-thumb {
+                background: linear-gradient(90deg, rgba(20, 184, 166, 0.8), rgba(6, 182, 212, 0.8));
+                border-radius: 10px;
+                border: 2px solid rgba(30, 41, 59, 0.3);
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(90deg, rgba(20, 184, 166, 1), rgba(6, 182, 212, 1));
+              }
+              
+              .passion-scroll-container::-webkit-scrollbar-thumb:active {
+                background: linear-gradient(90deg, rgba(13, 148, 136, 1), rgba(8, 145, 178, 1));
+              }
+            `}</style>
+            <div className="passion-scroll-container overflow-x-auto pb-6">
+            <h3 className="text-3xl font-bold text-white text-center mb-8">My Passions</h3>
+            <div className="overflow-x-auto pb-4">
+              <div className="flex gap-6 min-w-max px-0">
+                {passions.map((passion, index) => (
+                  <div
+                    key={index}
+                    className="bg-slate-800 rounded-xl p-6 border border-slate-700 hover:border-teal-500/50 transition-all hover:transform hover:scale-105 w-80 shrink-0"
+                  >
+                    <div className={`inline-flex p-4 rounded-xl bg-gradient-to-br ${passion.color} mb-4`}>
+                      <passion.icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h4 className="text-xl font-bold text-white mb-3">{passion.title}</h4>
+                    <p className="text-slate-400 text-sm leading-relaxed">{passion.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
+            <p className="text-center text-slate-400 text-sm mt-4">Scroll to see more passions →</p>
           </div>
         </div>
       </div>
+
+      {selectedCertificate && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setSelectedCertificate(null)}>
+          <div className="bg-slate-800 rounded-xl border border-slate-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="sticky top-0 flex items-center justify-between p-6 bg-slate-800 border-b border-slate-700">
+              <h3 className="text-2xl font-bold text-white">{selectedCertificate.title}</h3>
+              <button
+                onClick={() => setSelectedCertificate(null)}
+                className="text-slate-400 hover:text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="mb-6">
+                <div className="w-full h-96 bg-slate-900 rounded-lg border border-slate-700 flex items-center justify-center mb-4">
+                  <div className="text-center">
+                    <Award className="w-16 h-16 text-teal-400 mx-auto mb-3" />
+                    <p className="text-slate-400">Certificate Placeholder</p>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-slate-400 text-sm">Certificate Title</p>
+                  <p className="text-white font-semibold">{selectedCertificate.title}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 text-sm">Issuer</p>
+                  <p className="text-white font-semibold">{selectedCertificate.issuer}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400 text-sm">Year Earned</p>
+                  <p className="text-white font-semibold">{selectedCertificate.year}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

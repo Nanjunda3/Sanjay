@@ -11,18 +11,45 @@ export default function Contact() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitted(true);
+    try {
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      const response = await fetch(
+        `${supabaseUrl}/functions/v1/send-email`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${anonKey}`,
+          },
+          body: JSON.stringify({
+            type: 'contact',
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({ name: '', email: '', message: '', portfolio: false });
+        }, 3000);
+      } else {
+        console.error('Failed to send email');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
       setIsSubmitting(false);
-      setTimeout(() => {
-        setIsSubmitted(false);
-        setFormData({ name: '', email: '', message: '', portfolio: false });
-      }, 3000);
-    }, 1000);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -70,8 +97,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <div className="font-semibold text-white mb-1">Phone</div>
-                      <a href="tel:+917829927125" className="text-slate-400 text-sm hover:text-teal-400 transition-colors">
-                        (+91) 7829927125
+                      <a href="tel:+917892927125" className="text-slate-400 text-sm hover:text-teal-400 transition-colors">
+                        (+91) 7892927125
                       </a>
                     </div>
                   </div>
@@ -82,8 +109,8 @@ export default function Contact() {
                     </div>
                     <div>
                       <div className="font-semibold text-white mb-1">Email</div>
-                      <a href="mailto:sanjay@example.com" className="text-slate-400 text-sm hover:text-teal-400 transition-colors">
-                        sanjay@example.com
+                      <a href="mailto:sanjaysnanjunda@gmail.com" className="text-slate-400 text-sm hover:text-teal-400 transition-colors">
+                        sanjaysnanjunda@gmail.com
                       </a>
                     </div>
                   </div>
