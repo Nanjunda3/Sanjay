@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Home, Briefcase, GraduationCap, Heart, Menu, X } from 'lucide-react';
+import { Home, Briefcase, GraduationCap, Heart, Menu, X, Moon, Sun, Wrench } from 'lucide-react';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,9 +14,18 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   const navItems = [
     { icon: Home, label: 'Home', href: '#home' },
     { icon: Briefcase, label: 'Projects', href: '#projects' },
+    { icon: Wrench, label: 'Services', href: '#services' },
     { icon: GraduationCap, label: 'Education', href: '#education' },
     { icon: Heart, label: 'Passions', href: '#passions' },
   ];
@@ -47,13 +57,23 @@ export default function Header() {
             ))}
           </div>
 
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
+              aria-label="Toggle dark mode"
+            >
+              {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
 
         {isMobileMenuOpen && (

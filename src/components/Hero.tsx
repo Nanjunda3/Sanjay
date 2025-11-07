@@ -89,7 +89,7 @@ export default function Hero() {
 
               <div className="flex gap-4 justify-center md:justify-start pt-4">
                 <a
-                  href="https://github.com/Nanjunda3"
+                  href="https://github.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-slate-800 hover:bg-slate-700 rounded-full text-slate-300 hover:text-teal-400 transition-all hover:scale-110"
@@ -97,7 +97,7 @@ export default function Hero() {
                   <Github className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://www.linkedin.com/in/sanjayks-developer/"
+                  href="https://linkedin.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-slate-800 hover:bg-slate-700 rounded-full text-slate-300 hover:text-teal-400 transition-all hover:scale-110"
@@ -105,7 +105,7 @@ export default function Hero() {
                   <Linkedin className="w-5 h-5" />
                 </a>
                 <a
-                  href="mailto:sanjaysnanjunda@gmail.com"
+                  href="mailto:sanjay@example.com"
                   className="p-3 bg-slate-800 hover:bg-slate-700 rounded-full text-slate-300 hover:text-teal-400 transition-all hover:scale-110"
                 >
                   <Mail className="w-5 h-5" />
@@ -118,7 +118,7 @@ export default function Hero() {
                 <div className="absolute -inset-4 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
                 <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-teal-500/30 shadow-2xl">
                   <img
-                    src="/hero.jpg"
+                    src="https://via.placeholder.com/400x400/1e293b/64748b?text=Sanjay+K+S"
                     alt="Sanjay K S"
                     className="w-full h-full object-cover"
                   />
