@@ -7,6 +7,7 @@ import Education from './components/Education';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import AIChatbot from './components/AIChatbot';
+import Testimonials from './components/Testimonials';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Projects />
       <Experience />
       <Education />
+      <Testimonials />
       <Contact />
       <Footer />
       <AIChatbot />

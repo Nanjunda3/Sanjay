@@ -4,13 +4,13 @@ import { useState } from 'react';
 const projects = [
   {
     title: 'Interactive Floor SaaS',
-    company: 'BHT Global',
+    company: 'BHT Technologies',
     description: 'Dynamic platform for real estate visualization with interactive floor plans. Implemented real-time updates and collaborative features that increased user engagement by 30%.',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop',
     tech: ['React', 'Node.js', 'MongoDB', 'WebSockets'],
-    metrics: 'Scaled to 1K+ users | 30% engagement boost',
+    metrics: 'Scaled to 10K+ users | 30% engagement boost',
     liveUrl: '#',
-    githubUrl: '#',
+    githubUrl: 'https://github.com/Nanjunda3/SaaS_product',
   },
   {
     title: 'Urbanrise Website',
@@ -20,48 +20,48 @@ const projects = [
     tech: ['React', 'Next.js', 'Tailwind CSS', 'SEO'],
     metrics: '50% traffic increase | Mobile-first design',
     liveUrl: '#',
-    githubUrl: '#',
+    githubUrl: 'https://github.com/Nanjunda3/urbanrise',
   },
   {
-    title: 'Spaceman Design Portal',
-    company: 'Freelance',
+    title: 'Tahini',
+    company: 'BHT Technologies',
     description: 'Modern UI/UX focused design portfolio platform with smooth animations and intuitive navigation. Features showcase and client testimonial sections.',
     image: 'https://images.unsplash.com/photo-1558655146-d09347e92766?w=800&h=500&fit=crop',
-    tech: ['React', 'Framer Motion', 'CSS3', 'Firebase'],
+    tech: ['React', 'Framer Motion', 'CSS3', 'Firebase', 'ThreeJS'],
     metrics: 'Award-winning design | 95+ Lighthouse score',
     liveUrl: '#',
-    githubUrl: '#',
+    githubUrl: 'https://github.com/Nanjunda3/Tahini',
   },
   {
-    title: 'Global Investor Meet 2023',
+    title: 'Comic Con 2023',
     company: 'BHT Technologies',
     description: 'Large-scale event platform with live streaming capabilities, attendee management, and interactive networking features for 500+ participants.',
     image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop',
     tech: ['React', 'Node.js', 'Express', 'AWS'],
     metrics: '500+ concurrent users | Zero downtime',
     liveUrl: '#',
-    githubUrl: '#',
+    githubUrl: 'https://github.com/Nanjunda3/Comiccon_December_2023',
   },
   {
-    title: 'Gourmet Luxe 2023',
+    title: 'Siemens 2023',
     company: 'BHT Technologies',
-    description: 'Premium event booking and management system with payment integration and automated email notifications for high-end culinary experiences.',
+    description: 'Premium event showcase and management system with high-end culinary experiences. Engaging cutting edge user experience',
     image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=500&fit=crop',
-    tech: ['React', 'Stripe', 'Node.js', 'MongoDB'],
-    metrics: 'Payment gateway integration | Automated workflows',
+    tech: ['React', 'Node.js', 'MongoDB'],
+    metrics: 'Automated workflows | TD Integration',
     liveUrl: '#',
-    githubUrl: '#',
+    githubUrl: 'https://github.com/Nanjunda3/Siemens_OSC',
   },
-  {
-    title: 'E-Commerce Dashboard',
-    company: 'Personal Project',
-    description: 'Comprehensive admin dashboard for e-commerce management with analytics, inventory tracking, and order processing features.',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop',
-    tech: ['React', 'Chart.js', 'Redux', 'REST API'],
-    metrics: 'Real-time analytics | Inventory management',
-    liveUrl: '#',
-    githubUrl: '#',
-  },
+  // {
+  //   title: 'E-Commerce Dashboard',
+  //   company: 'Personal Project',
+  //   description: 'Comprehensive admin dashboard for e-commerce management with analytics, inventory tracking, and order processing features.',
+  //   image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop',
+  //   tech: ['React', 'Chart.js', 'Redux', 'REST API'],
+  //   metrics: 'Real-time analytics | Inventory management',
+  //   liveUrl: '#',
+  //   githubUrl: '#',
+  // },
 ];
 
 export default function Projects() {
@@ -93,15 +93,17 @@ export default function Projects() {
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60" />
                   {hoveredIndex === index && (
                     <div className="absolute inset-0 bg-slate-900/80 flex items-center justify-center gap-4 animate-fade-in">
-                      <a
+                      {/* <a
                         href={project.liveUrl}
+                        target='_blank'
                         className="p-3 bg-teal-500 hover:bg-teal-600 rounded-full text-white transition-colors"
                         aria-label="View live project"
                       >
                         <ExternalLink className="w-5 h-5" />
-                      </a>
+                      </a> */}
                       <a
                         href={project.githubUrl}
+                        target='_blank'
                         className="p-3 bg-slate-700 hover:bg-slate-600 rounded-full text-white transition-colors"
                         aria-label="View source code"
                       >

@@ -1,45 +1,50 @@
-import { ArrowUp, Mail, Phone, MapPin, Linkedin, Github, Instagram } from 'lucide-react';
+import { ArrowUp, Mail, Phone, MapPin, Linkedin, Github, Instagram, AlertCircle } from 'lucide-react';
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
   const [isSubscribing, setIsSubscribing] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubscribing(true);
+    setError('');
 
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-      const response = await fetch(
-        `${supabaseUrl}/functions/v1/send-email`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${anonKey}`,
-          },
-          body: JSON.stringify({
-            type: 'newsletter',
-            subscriberEmail: email,
-          }),
-        }
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS configuration is missing.');
+      }
+
+      // Send newsletter subscription notification
+      const templateParams = {
+        from_name: 'Newsletter Subscriber',
+        from_email: email,
+        message: `New newsletter subscription from: ${email}`,
+        to_email: 'sanjaysnanjunda@gmail.com',
+      };
+
+      await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
       );
 
-      if (response.ok) {
-        setSubscribed(true);
-        setTimeout(() => {
-          setSubscribed(false);
-          setEmail('');
-        }, 3000);
-      } else {
-        console.error('Failed to subscribe');
-      }
-    } catch (error) {
+      setSubscribed(true);
+      setTimeout(() => {
+        setSubscribed(false);
+        setEmail('');
+      }, 3000);
+    } catch (error: any) {
       console.error('Error subscribing:', error);
+      setError('Failed to subscribe. Please try again.');
     } finally {
       setIsSubscribing(false);
     }
@@ -80,15 +85,6 @@ export default function Footer() {
                 >
                   <Github className="w-5 h-5" />
                 </a>
-                {/* <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-teal-400 transition-all"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="w-5 h-5" />
-                </a> */}
                 <a
                   href="https://www.instagram.com/x_sanju._2?igsh=Y3lzc2R2N3huZWN1"
                   target="_blank"
@@ -114,11 +110,6 @@ export default function Footer() {
                     Projects
                   </a>
                 </li>
-                {/* <li>
-                  <a href="#services" className="text-slate-400 hover:text-teal-400 transition-colors">
-                    Services
-                  </a>
-                </li> */}
                 <li>
                   <a href="#education" className="text-slate-400 hover:text-teal-400 transition-colors">
                     Education
@@ -159,19 +150,25 @@ export default function Footer() {
             <div className="mb-8">
               <h4 className="font-bold text-white mb-4 text-center">Subscribe to Dev Tips Newsletter</h4>
               <form onSubmit={handleSubscribe} className="max-w-md mx-auto">
-                <div className="flex gap-2">
+                {error && (
+                  <div className="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+                    <p className="text-red-400 text-sm">{error}</p>
+                  </div>
+                )}
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="your@email.com"
                     required
-                    disabled={isSubscribing}
+                    disabled={isSubscribing || subscribed}
                     className="flex-1 px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-teal-500 transition-colors disabled:opacity-50"
                   />
                   <button
                     type="submit"
-                    disabled={isSubscribing}
+                    disabled={isSubscribing || subscribed}
                     className="px-6 py-2 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {subscribed ? 'Subscribed!' : isSubscribing ? 'Subscribing...' : 'Subscribe'}

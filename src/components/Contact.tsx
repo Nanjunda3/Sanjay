@@ -1,7 +1,9 @@
-import { useState } from 'react';
-import { Mail, Phone, MapPin, Send, CheckCircle, Linkedin, Github, Instagram, Twitter } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { Mail, Phone, MapPin, Send, CheckCircle, Linkedin, Github, Instagram, Twitter, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 export default function Contact() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -10,43 +12,51 @@ export default function Contact() {
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
 
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      // Get EmailJS credentials from environment variables
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-      const response = await fetch(
-        `${supabaseUrl}/functions/v1/send-email`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${anonKey}`,
-          },
-          body: JSON.stringify({
-            type: 'contact',
-            name: formData.name,
-            email: formData.email,
-            message: formData.message,
-          }),
-        }
+      // Validate environment variables
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS configuration is missing. Please check your .env file.');
+      }
+
+      // Prepare template parameters
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        message: formData.message,
+        portfolio_review: formData.portfolio ? 'Yes' : 'No',
+        to_email: 'sanjaysnanjunda@gmail.com', // Your email
+      };
+
+      // Send email using EmailJS
+      const result = await emailjs.send(
+        serviceId,
+        templateId,
+        templateParams,
+        publicKey
       );
 
-      if (response.ok) {
-        setIsSubmitted(true);
-        setTimeout(() => {
-          setIsSubmitted(false);
-          setFormData({ name: '', email: '', message: '', portfolio: false });
-        }, 3000);
-      } else {
-        console.error('Failed to send email');
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
+      console.log('Email sent successfully:', result.text);
+      
+      setIsSubmitted(true);
+      setTimeout(() => {
+        setIsSubmitted(false);
+        setFormData({ name: '', email: '', message: '', portfolio: false });
+      }, 3000);
+    } catch (error: any) {
+      console.error('Error sending email:', error);
+      setError(error.message || 'Failed to send message. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -164,7 +174,7 @@ export default function Contact() {
             </div>
 
             <div>
-              <form onSubmit={handleSubmit} className="bg-slate-900 rounded-xl p-8 border border-slate-700">
+              <form ref={formRef} onSubmit={handleSubmit} className="bg-slate-900 rounded-xl p-8 border border-slate-700">
                 <h3 className="text-2xl font-bold text-white mb-6">Send Me a Message</h3>
 
                 {isSubmitted ? (
@@ -176,84 +186,93 @@ export default function Contact() {
                     </p>
                   </div>
                 ) : (
-                  <div className="space-y-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-semibold text-slate-300 mb-2">
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-teal-500 transition-colors"
-                        placeholder="John Doe"
-                      />
-                    </div>
+                  <>
+                    {error && (
+                      <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg flex items-start gap-3">
+                        <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+                        <p className="text-red-400 text-sm">{error}</p>
+                      </div>
+                    )}
 
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-semibold text-slate-300 mb-2">
-                        Your Email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-teal-500 transition-colors"
-                        placeholder="john@example.com"
-                      />
-                    </div>
+                    <div className="space-y-6">
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-semibold text-slate-300 mb-2">
+                          Your Name
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-teal-500 transition-colors"
+                          placeholder="Charles"
+                        />
+                      </div>
 
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-semibold text-slate-300 mb-2">
-                        Message
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        required
-                        rows={5}
-                        className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-teal-500 transition-colors resize-none"
-                        placeholder="Tell me about your project..."
-                      />
-                    </div>
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-semibold text-slate-300 mb-2">
+                          Your Email
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          required
+                          className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-teal-500 transition-colors"
+                          placeholder="charles@example.com"
+                        />
+                      </div>
 
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        id="portfolio"
-                        name="portfolio"
-                        checked={formData.portfolio}
-                        onChange={handleChange}
-                        className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-teal-500 focus:ring-teal-500 focus:ring-offset-slate-900"
-                      />
-                      <label htmlFor="portfolio" className="text-sm text-slate-400">
-                        I'm interested in a portfolio review
-                      </label>
-                    </div>
+                      <div>
+                        <label htmlFor="message" className="block text-sm font-semibold text-slate-300 mb-2">
+                          Message
+                        </label>
+                        <textarea
+                          id="message"
+                          name="message"
+                          value={formData.message}
+                          onChange={handleChange}
+                          required
+                          rows={5}
+                          className="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-teal-500 transition-colors resize-none"
+                          placeholder="Tell me about your project..."
+                        />
+                      </div>
 
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-4 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                    >
-                      {isSubmitting ? (
-                        <span>Sending...</span>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5" />
-                          <span>Send Message</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="checkbox"
+                          id="portfolio"
+                          name="portfolio"
+                          checked={formData.portfolio}
+                          onChange={handleChange}
+                          className="w-4 h-4 rounded border-slate-700 bg-slate-800 text-teal-500 focus:ring-teal-500 focus:ring-offset-slate-900"
+                        />
+                        <label htmlFor="portfolio" className="text-sm text-slate-400">
+                          I'm interested in a portfolio review
+                        </label>
+                      </div>
+
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full py-4 bg-gradient-to-r from-teal-500 to-blue-600 hover:from-teal-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        {isSubmitting ? (
+                          <span>Sending...</span>
+                        ) : (
+                          <>
+                            <Send className="w-5 h-5" />
+                            <span>Send Message</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </>
                 )}
               </form>
             </div>

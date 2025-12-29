@@ -17,7 +17,7 @@ const testimonials = [
     text: "Working with Sanjay on the Interactive Floor SaaS was outstanding. His technical expertise and attention to detail helped us scale to 1000+ users with zero downtime. Highly recommended!",
   },
   {
-    name: 'Michael Chen',
+    name: 'Meer Subur Ali',
     role: 'Founder, Spaceman Design',
     image: 'https://ui-avatars.com/api/?name=Michael+Chen&background=f59e0b&color=fff&size=128',
     rating: 5,

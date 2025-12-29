@@ -7,7 +7,7 @@ export default function Hero() {
 
   useEffect(() => {
     const timer1 = setInterval(() => {
-      setCount1((prev) => (prev < 5 ? prev + 1 : prev));
+      setCount1((prev) => (prev < 3 ? prev + 1 : prev));
     }, 200);
     const timer2 = setInterval(() => {
       setCount2((prev) => (prev < 10 ? prev + 1 : prev));
@@ -39,7 +39,7 @@ export default function Hero() {
       <div className="container mx-auto px-4 py-20 relative z-10">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="text-center md:text-left space-y-6 animate-fade-in">
+            <div className="text-center md:text-left space-y-6 animate-fade-in order-2 md:order-1">
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
                 <span className="text-white">Sanjay K S</span>
                 <br />
@@ -113,7 +113,7 @@ export default function Hero() {
               </div>
             </div>
 
-            <div className="flex justify-center">
+            <div className="flex justify-center order-1 md:order-2">
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-r from-teal-500 to-blue-600 rounded-full blur-2xl opacity-50 group-hover:opacity-75 transition-opacity" />
                 <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-teal-500/30 shadow-2xl">
